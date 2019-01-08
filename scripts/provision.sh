@@ -1,5 +1,42 @@
 #!/usr/bin/env bash
 
+sudo groupadd admin
+sudo useradd -G admin -d /home/vagrant -s /bin/bash vagrant
+sudo passwd vagrant
+
+
+# Edit sudoers file to disable requiretty
+$ visudo
+ 
+# Defaults    requiretty
+ 
+# add user vagrant 
+$ useradd vagrant
+#NOTE: TO Remove User:
+#             userdel vagrant
+ 
+# set password for user vagrant (vagrant)
+$ passwd vagrant
+ 
+# create vagrant sudoers file 
+$ visudo -f /etc /sudoers.d/vagrant
+ 
+vagrant ALL=(ALL) NOPASSWD:ALL
+ 
+# change to user vagrant
+$ su - vagrant
+ 
+# create ssh folder with access rights
+$ mkdir .ssh && chmod 0700 .ssh && cd .ssh
+ 
+# create authorized_keys file
+$ echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key" > authorized_keys
+ 
+# set access rights for authorized_keys file
+$ chmod 0600 authorized_keys
+ 
+
+
 export DEBIAN_FRONTEND=noninteractive
 
 # Update Package List
@@ -18,7 +55,11 @@ locale-gen en_US.UTF-8
 
 apt-get install -y software-properties-common curl
 
-apt-add-repository ppa:nginx/development -y
+
+
+#apt-add-repository ppa:nginx/development -y
+#Note: To remove:
+#     apt-add-repository ppa:nginx/development -r
 #apt-add-repository ppa:chris-lea/redis-server -y
 apt-add-repository ppa:ondrej/php -y
 
@@ -44,7 +85,7 @@ apt-get update
 
 apt-get install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev libpng-dev ntp unzip \
 make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim libnotify-bin \
-pv cifs-utils mcrypt bash-completion zsh graphviz
+pv cifs-utils mcrypt bash-completion zsh graphviz mc p7zip-full p7zip-rar nano
 
 # Set My Timezone
 
@@ -62,44 +103,44 @@ php7.2-intl php7.2-readline php7.2-ldap \
 php-xdebug php-pear
 
 # PHP 7.3
-apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-php7.3-cli php7.3-dev \
-php7.3-pgsql php7.3-sqlite3 php7.3-gd \
-php7.3-curl \
-php7.3-imap php7.3-mysql php7.3-mbstring \
-php7.3-xml php7.3-zip php7.3-bcmath php7.3-soap \
-php7.3-intl php7.3-readline
+#apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+#php7.3-cli php7.3-dev \
+#php7.3-pgsql php7.3-sqlite3 php7.3-gd \
+#php7.3-curl \
+#php7.3-imap php7.3-mysql php7.3-mbstring \
+#php7.3-xml php7.3-zip php7.3-bcmath php7.3-soap \
+#php7.3-intl php7.3-readline
 
 # PHP 7.1
-apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-php7.1-cli php7.1-dev \
-php7.1-pgsql php7.1-sqlite3 php7.1-gd \
-php7.1-curl php7.1-memcached \
-php7.1-imap php7.1-mysql php7.1-mbstring \
-php7.1-xml php7.1-zip php7.1-bcmath php7.1-soap \
-php7.1-intl php7.1-readline
+#apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+#php7.1-cli php7.1-dev \
+#php7.1-pgsql php7.1-sqlite3 php7.1-gd \
+#php7.1-curl php7.1-memcached \
+#php7.1-imap php7.1-mysql php7.1-mbstring \
+#php7.1-xml php7.1-zip php7.1-bcmath php7.1-soap \
+#php7.1-intl php7.1-readline
 
 # PHP 7.0
-apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-php7.0-cli php7.0-dev \
-php7.0-pgsql php7.0-sqlite3 php7.0-gd \
-php7.0-curl php7.0-memcached \
-php7.0-imap php7.0-mysql php7.0-mbstring \
-php7.0-xml php7.0-zip php7.0-bcmath php7.0-soap \
-php7.0-intl php7.0-readline
+#apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+#php7.0-cli php7.0-dev \
+#php7.0-pgsql php7.0-sqlite3 php7.0-gd \
+#php7.0-curl php7.0-memcached \
+#php7.0-imap php7.0-mysql php7.0-mbstring \
+#php7.0-xml php7.0-zip php7.0-bcmath php7.0-soap \
+#php7.0-intl php7.0-readline
 
 # PHP 5.6
-apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-php5.6-cli php5.6-dev \
-php5.6-pgsql php5.6-sqlite3 php5.6-gd \
-php5.6-curl php5.6-memcached \
-php5.6-imap php5.6-mysql php5.6-mbstring \
-php5.6-xml php5.6-zip php5.6-bcmath php5.6-soap \
-php5.6-intl php5.6-readline php5.6-mcrypt
+#apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+#php5.6-cli php5.6-dev \
+#php5.6-pgsql php5.6-sqlite3 php5.6-gd \
+#php5.6-curl php5.6-memcached \
+#php5.6-imap php5.6-mysql php5.6-mbstring \
+#php5.6-xml php5.6-zip php5.6-bcmath php5.6-soap \
+#php5.6-intl php5.6-readline php5.6-mcrypt
 
-update-alternatives --set php /usr/bin/php7.2
-update-alternatives --set php-config /usr/bin/php-config7.2
-update-alternatives --set phpize /usr/bin/phpize7.2
+#update-alternatives --set php /usr/bin/php7.2
+#update-alternatives --set php-config /usr/bin/php-config7.2
+#update-alternatives --set phpize /usr/bin/phpize7.2
 
 # Install Composer
 
@@ -121,30 +162,32 @@ sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.2/cli/php.in
 sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.2/cli/php.ini
 sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.2/cli/php.ini
 
-sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.3/cli/php.ini
-sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.3/cli/php.ini
-sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.3/cli/php.ini
-sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.3/cli/php.ini
+#sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.3/cli/php.ini
+#sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.3/cli/php.ini
+#sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.3/cli/php.ini
+#sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.3/cli/php.ini
 
-sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/cli/php.ini
+#sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/cli/php.ini
+#sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/cli/php.ini
+#sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/cli/php.ini
+#sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/cli/php.ini
 
-sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/cli/php.ini
-sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/cli/php.ini
-sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.0/cli/php.ini
-sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.0/cli/php.ini
+#sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/cli/php.ini
+#sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/cli/php.ini
+#sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.0/cli/php.ini
+#sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.0/cli/php.ini
 
-sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/5.6/cli/php.ini
-sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/5.6/cli/php.ini
-sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/5.6/cli/php.ini
-sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/5.6/cli/php.ini
+#sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/5.6/cli/php.ini
+#sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/5.6/cli/php.ini
+#sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/5.6/cli/php.ini
+#sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/5.6/cli/php.ini
 
 # Install Nginx & PHP-FPM
 
+#apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+#nginx php7.1-fpm php7.3-fpm php7.2-fpm php7.0-fpm php5.6-fpm
 apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-nginx php7.1-fpm php7.3-fpm php7.2-fpm php7.0-fpm php5.6-fpm
+nginx php7.2-fpm
 
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
@@ -162,29 +205,29 @@ echo "xdebug.remote_port = 9000" >> /etc/php/7.2/mods-available/xdebug.ini
 echo "xdebug.max_nesting_level = 512" >> /etc/php/7.2/mods-available/xdebug.ini
 echo "opcache.revalidate_freq = 0" >> /etc/php/7.2/mods-available/opcache.ini
 
-echo "xdebug.remote_enable = 1" >> /etc/php/7.3/mods-available/xdebug.ini
-echo "xdebug.remote_connect_back = 1" >> /etc/php/7.3/mods-available/xdebug.ini
-echo "xdebug.remote_port = 9000" >> /etc/php/7.3/mods-available/xdebug.ini
-echo "xdebug.max_nesting_level = 512" >> /etc/php/7.3/mods-available/xdebug.ini
-echo "opcache.revalidate_freq = 0" >> /etc/php/7.3/mods-available/opcache.ini
+#echo "xdebug.remote_enable = 1" >> /etc/php/7.3/mods-available/xdebug.ini
+#echo "xdebug.remote_connect_back = 1" >> /etc/php/7.3/mods-available/xdebug.ini
+#echo "xdebug.remote_port = 9000" >> /etc/php/7.3/mods-available/xdebug.ini
+#echo "xdebug.max_nesting_level = 512" >> /etc/php/7.3/mods-available/xdebug.ini
+#echo "opcache.revalidate_freq = 0" >> /etc/php/7.3/mods-available/opcache.ini
 
-echo "xdebug.remote_enable = 1" >> /etc/php/7.1/mods-available/xdebug.ini
-echo "xdebug.remote_connect_back = 1" >> /etc/php/7.1/mods-available/xdebug.ini
-echo "xdebug.remote_port = 9000" >> /etc/php/7.1/mods-available/xdebug.ini
-echo "xdebug.max_nesting_level = 512" >> /etc/php/7.1/mods-available/xdebug.ini
-echo "opcache.revalidate_freq = 0" >> /etc/php/7.1/mods-available/opcache.ini
+#echo "xdebug.remote_enable = 1" >> /etc/php/7.1/mods-available/xdebug.ini
+#echo "xdebug.remote_connect_back = 1" >> /etc/php/7.1/mods-available/xdebug.ini
+#echo "xdebug.remote_port = 9000" >> /etc/php/7.1/mods-available/xdebug.ini
+#echo "xdebug.max_nesting_level = 512" >> /etc/php/7.1/mods-available/xdebug.ini
+#echo "opcache.revalidate_freq = 0" >> /etc/php/7.1/mods-available/opcache.ini
 
-echo "xdebug.remote_enable = 1" >> /etc/php/7.0/mods-available/xdebug.ini
-echo "xdebug.remote_connect_back = 1" >> /etc/php/7.0/mods-available/xdebug.ini
-echo "xdebug.remote_port = 9000" >> /etc/php/7.0/mods-available/xdebug.ini
-echo "xdebug.max_nesting_level = 512" >> /etc/php/7.0/mods-available/xdebug.ini
-echo "opcache.revalidate_freq = 0" >> /etc/php/7.0/mods-available/opcache.ini
+#echo "xdebug.remote_enable = 1" >> /etc/php/7.0/mods-available/xdebug.ini
+#echo "xdebug.remote_connect_back = 1" >> /etc/php/7.0/mods-available/xdebug.ini
+#echo "xdebug.remote_port = 9000" >> /etc/php/7.0/mods-available/xdebug.ini
+#echo "xdebug.max_nesting_level = 512" >> /etc/php/7.0/mods-available/xdebug.ini
+#echo "opcache.revalidate_freq = 0" >> /etc/php/7.0/mods-available/opcache.ini
 
-echo "xdebug.remote_enable = 1" >> /etc/php/5.6/mods-available/xdebug.ini
-echo "xdebug.remote_connect_back = 1" >> /etc/php/5.6/mods-available/xdebug.ini
-echo "xdebug.remote_port = 9000" >> /etc/php/5.6/mods-available/xdebug.ini
-echo "xdebug.max_nesting_level = 512" >> /etc/php/5.6/mods-available/xdebug.ini
-echo "opcache.revalidate_freq = 0" >> /etc/php/5.6/mods-available/opcache.ini
+#echo "xdebug.remote_enable = 1" >> /etc/php/5.6/mods-available/xdebug.ini
+#echo "xdebug.remote_connect_back = 1" >> /etc/php/5.6/mods-available/xdebug.ini
+#echo "xdebug.remote_port = 9000" >> /etc/php/5.6/mods-available/xdebug.ini
+#echo "xdebug.max_nesting_level = 512" >> /etc/php/5.6/mods-available/xdebug.ini
+#echo "opcache.revalidate_freq = 0" >> /etc/php/5.6/mods-available/opcache.ini
 
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.2/fpm/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.2/fpm/php.ini
@@ -199,56 +242,6 @@ printf "openssl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php
 
 printf "[curl]\n" | tee -a /etc/php/7.2/fpm/php.ini
 printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/7.2/fpm/php.ini
-
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.3/fpm/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.3/fpm/php.ini
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.3/fpm/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.3/fpm/php.ini
-sed -i "s/upload_max_filesize = .*/upload_max_filesize = 100M/" /etc/php/7.3/fpm/php.ini
-sed -i "s/post_max_size = .*/post_max_size = 100M/" /etc/php/7.3/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.3/fpm/php.ini
-
-printf "[openssl]\n" | tee -a /etc/php/7.3/fpm/php.ini
-printf "openssl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/7.3/fpm/php.ini
-
-printf "[curl]\n" | tee -a /etc/php/7.3/fpm/php.ini
-printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/7.3/fpm/php.ini
-
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/fpm/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/fpm/php.ini
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/fpm/php.ini
-sed -i "s/upload_max_filesize = .*/upload_max_filesize = 100M/" /etc/php/7.1/fpm/php.ini
-sed -i "s/post_max_size = .*/post_max_size = 100M/" /etc/php/7.1/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
-
-printf "[openssl]\n" | tee -a /etc/php/7.1/fpm/php.ini
-printf "openssl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/7.1/fpm/php.ini
-
-printf "[curl]\n" | tee -a /etc/php/7.1/fpm/php.ini
-printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/7.1/fpm/php.ini
-
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/fpm/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/fpm/php.ini
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.0/fpm/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.0/fpm/php.ini
-sed -i "s/upload_max_filesize = .*/upload_max_filesize = 100M/" /etc/php/7.0/fpm/php.ini
-sed -i "s/post_max_size = .*/post_max_size = 100M/" /etc/php/7.0/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.0/fpm/php.ini
-
-printf "[curl]\n" | tee -a /etc/php/7.0/fpm/php.ini
-printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/7.0/fpm/php.ini
-
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/5.6/fpm/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php/5.6/fpm/php.ini
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/5.6/fpm/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/5.6/fpm/php.ini
-sed -i "s/upload_max_filesize = .*/upload_max_filesize = 100M/" /etc/php/5.6/fpm/php.ini
-sed -i "s/post_max_size = .*/post_max_size = 100M/" /etc/php/5.6/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/5.6/fpm/php.ini
-
-printf "[curl]\n" | tee -a /etc/php/5.6/fpm/php.ini
-printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/5.6/fpm/php.ini
 
 # Disable XDebug On The CLI
 
@@ -286,44 +279,8 @@ sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" 
 sed -i "s/user = www-data/user = vagrant/" /etc/php/7.2/fpm/pool.d/www.conf
 sed -i "s/group = www-data/group = vagrant/" /etc/php/7.2/fpm/pool.d/www.conf
 
-sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/7.2/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/7.2/fpm/pool.d/www.conf
-sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.2/fpm/pool.d/www.conf
-
-sed -i "s/user = www-data/user = vagrant/" /etc/php/7.3/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = vagrant/" /etc/php/7.3/fpm/pool.d/www.conf
-
-sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/7.3/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/7.3/fpm/pool.d/www.conf
-sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.3/fpm/pool.d/www.conf
-
-sed -i "s/user = www-data/user = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-
-sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.1/fpm/pool.d/www.conf
-
-sed -i "s/user = www-data/user = vagrant/" /etc/php/7.0/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = vagrant/" /etc/php/7.0/fpm/pool.d/www.conf
-
-sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/7.0/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/7.0/fpm/pool.d/www.conf
-sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.0/fpm/pool.d/www.conf
-
-sed -i "s/user = www-data/user = vagrant/" /etc/php/5.6/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = vagrant/" /etc/php/5.6/fpm/pool.d/www.conf
-
-sed -i "s/listen\.owner.*/listen.owner = vagrant/" /etc/php/5.6/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = vagrant/" /etc/php/5.6/fpm/pool.d/www.conf
-sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/5.6/fpm/pool.d/www.conf
-
 service nginx restart
 service php7.2-fpm restart
-service php7.3-fpm restart
-service php7.1-fpm restart
-service php7.0-fpm restart
-service php5.6-fpm restart
 
 # Add Vagrant User To WWW-Data
 
