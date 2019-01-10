@@ -2,38 +2,33 @@
 
 sudo groupadd admin
 sudo useradd -G admin -d /home/vagrant -s /bin/bash vagrant
+mkdir /home/vagrant
+chown vagrant:vagrant -R /home/vagrant
 sudo passwd vagrant
 
 
+
 # Edit sudoers file to disable requiretty
-$ visudo
+visudo
  
 # Defaults    requiretty
  
-# add user vagrant 
-$ useradd vagrant
-#NOTE: TO Remove User:
-#             userdel vagrant
- 
-# set password for user vagrant (vagrant)
-$ passwd vagrant
- 
 # create vagrant sudoers file 
-$ visudo -f /etc /sudoers.d/vagrant
+visudo -f /etc/sudoers.d/vagrant
  
 vagrant ALL=(ALL) NOPASSWD:ALL
  
 # change to user vagrant
-$ su - vagrant
+su - vagrant
  
 # create ssh folder with access rights
-$ mkdir .ssh && chmod 0700 .ssh && cd .ssh
+mkdir .ssh && chmod 0700 .ssh && cd .ssh
  
 # create authorized_keys file
-$ echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key" > authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key" > authorized_keys
  
 # set access rights for authorized_keys file
-$ chmod 0600 authorized_keys
+chmod 0600 authorized_keys
  
 
 
@@ -41,19 +36,18 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Update Package List
 
-apt-get update
-
+sudo apt-get update
 # Update System Packages
-apt-get -y upgrade
+sudo apt-get -y upgrade
 
 # Force Locale
 
-echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
-locale-gen en_US.UTF-8
+sudo echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
+sudo locale-gen en_US.UTF-8
 
 # Install Some PPAs
 
-apt-get install -y software-properties-common curl
+sudo apt-get install -y software-properties-common curl
 
 
 
@@ -83,17 +77,17 @@ apt-get update
 
 # Install Some Basic Packages
 
-apt-get install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev libpng-dev ntp unzip \
+sudo apt-get install -y build-essential dos2unix gcc git libmcrypt4 libpcre3-dev libpng-dev ntp unzip \
 make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim libnotify-bin \
 pv cifs-utils mcrypt bash-completion zsh graphviz mc p7zip-full p7zip-rar nano
 
 # Set My Timezone
 
-ln -sf /usr/share/zoneinfo/UTC /etc/localtime
+sudo ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
 # Install PHP Stuffs
 # Current PHP
-apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+sudo apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
 php7.2-cli php7.2-dev \
 php7.2-pgsql php7.2-sqlite3 php7.2-gd \
 php7.2-curl php7.2-memcached \
@@ -145,7 +139,7 @@ php-xdebug php-pear
 # Install Composer
 
 curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+sudo mv composer.phar /usr/local/bin/composer
 
 # Install Laravel Envoy & Installer
 
